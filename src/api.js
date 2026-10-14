@@ -1,5 +1,9 @@
 const TOKEN_KEY = 'shop_token';
 
+// Where the shop-backend API lives. Empty means "same origin", which uses the
+// Vite dev proxy locally. Set VITE_API_URL when the backend is hosted elsewhere.
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+
 export const getToken = () => localStorage.getItem(TOKEN_KEY);
 export const setToken = (token) =>
   token ? localStorage.setItem(TOKEN_KEY, token) : localStorage.removeItem(TOKEN_KEY);
@@ -11,19 +15,19 @@ async function request(path, { method = 'GET', body } = {}) {
 
   let res;
   try {
-    res = await fetch(`/api${path}`, {
+    res = await fetch(`${API_URL}/api${path}`, {
       method,
       headers,
       body: body ? JSON.stringify(body) : undefined,
     });
   } catch {
-    throw new Error('Cannot reach the server. Is the backend running?');
+    throw new Error('Cannot reach the server. Make sure shop-backend is running.');
   }
   if (res.status === 204) return null;
   const data = await res.json().catch(() => null);
   // A non-JSON error means the dev proxy could not reach the backend.
   if (!data && !res.ok) {
-    throw new Error('Cannot reach the server. Start the backend: cd server && npm start');
+    throw new Error('Cannot reach the server. Make sure shop-backend is running.');
   }
   if (!res.ok) {
     const error = new Error(data.error || `Request failed (${res.status})`);
