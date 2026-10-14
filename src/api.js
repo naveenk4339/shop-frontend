@@ -47,5 +47,6 @@ export const api = {
   setQty: (productId, qty) => request(`/cart/${productId}`, { method: 'PUT', body: { qty } }),
   clearCart: () => request('/cart', { method: 'DELETE' }),
   checkout: (card) => request('/checkout', { method: 'POST', body: { card } }),
+  orders: () => request('/orders'),
   order: (orderId) => request(`/orders/${encodeURIComponent(orderId)}`),
 };

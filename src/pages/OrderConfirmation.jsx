@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { api } from '../api.js';
-
-const formatPrice = (value) => `$${value.toFixed(2)}`;
+import { deliveryDate, formatOrderDate, formatPrice, parseServerDate } from '../format.js';
 
 export default function OrderConfirmation() {
+  const navigate = useNavigate();
   const { orderId } = useParams();
   const location = useLocation();
   // Use the order passed from checkout; otherwise (e.g. after a reload) load it.
@@ -16,32 +16,66 @@ export default function OrderConfirmation() {
     api.order(orderId).then(setOrder).catch((err) => setError(err.message));
   }, [order, orderId]);
 
-  if (!order) return <p className="loading">{error || 'Loading…'}</p>;
+  if (!order) {
+    return (
+      <div className="page-container">
+        {error ? <div className="alert alert-error" role="alert">{error}</div> : <p className="loading">Loading…</p>}
+      </div>
+    );
+  }
+
+  const justPlaced = Boolean(location.state?.order);
 
   return (
-    <div className="page-center">
-      <div className="card confirmation">
-        <div className="approved-badge">✓ Payment approved</div>
-        <p className="approved-amount">{formatPrice(order.totalAmount)}</p>
-        <dl className="order-meta">
-          <div><dt>Order ID</dt><dd>{order.id}</dd></div>
-          <div><dt>Total items</dt><dd>{order.totalItems}</dd></div>
-          <div><dt>Paid with</dt><dd>{order.card.brand} ending {order.card.last4}</dd></div>
-        </dl>
-        <ul className="cart-lines">
-          {order.items.map((item) => (
-            <li key={item.productId}>
-              <span>{item.name} × {item.qty}</span>
-              <span>{formatPrice(item.lineTotal)}</span>
-            </li>
-          ))}
-        </ul>
-        <div className="totals">
-          <div><span>Total items</span><strong>{order.totalItems}</strong></div>
-          <div><span>Approved amount</span><strong>{formatPrice(order.totalAmount)}</strong></div>
+    <div className="page-container confirmation-page">
+      <section className="panel confirmation">
+        <div className="confirmation-head">
+          <span className="confirm-icon" aria-hidden="true">✓</span>
+          <div>
+            <h1>{justPlaced ? 'Order placed, thank you!' : 'Order details'}</h1>
+            <p className="approved">
+              Payment approved: <strong>{formatPrice(order.totalAmount)}</strong>
+            </p>
+          </div>
         </div>
-        <Link className="btn primary" to="/home">Continue shopping</Link>
-      </div>
+
+        <dl className="order-facts">
+          <div><dt>Order number</dt><dd className="mono">{order.id}</dd></div>
+          <div><dt>Order placed</dt><dd>{formatOrderDate(order.createdAt)}</dd></div>
+          <div><dt>Total items</dt><dd>{order.totalItems}</dd></div>
+          <div><dt>Paid with</dt><dd>{order.card.brand} ending in {order.card.last4}</dd></div>
+          <div><dt>Arriving</dt><dd>{deliveryDate(parseServerDate(order.createdAt))}</dd></div>
+        </dl>
+
+        <table className="order-table">
+          <thead>
+            <tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr>
+          </thead>
+          <tbody>
+            {order.items.map((item) => (
+              <tr key={item.productId}>
+                <td>{item.name}</td>
+                <td>{item.qty}</td>
+                <td>{formatPrice(item.price)}</td>
+                <td>{formatPrice(item.lineTotal)}</td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr><td colSpan="3">Total items</td><td>{order.totalItems}</td></tr>
+            <tr className="grand-total"><td colSpan="3">Approved amount</td><td>{formatPrice(order.totalAmount)}</td></tr>
+          </tfoot>
+        </table>
+
+        <div className="button-row">
+          <button type="button" className="btn btn-primary" onClick={() => navigate('/home')}>
+            Continue shopping
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={() => navigate('/orders')}>
+            View your orders
+          </button>
+        </div>
+      </section>
     </div>
   );
 }

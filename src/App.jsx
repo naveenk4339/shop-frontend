@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import Layout from './components/Layout.jsx';
 import Login from './pages/Login.jsx';
 import Home from './pages/Home.jsx';
+import Cart from './pages/Cart.jsx';
 import Checkout from './pages/Checkout.jsx';
 import OrderConfirmation from './pages/OrderConfirmation.jsx';
+import Orders from './pages/Orders.jsx';
 import { api, getToken, setToken } from './api.js';
 
 export default function App() {
@@ -40,12 +43,13 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={user ? <Navigate to="/home" replace /> : <Login onLogin={handleLogin} />} />
-      <Route
-        path="/home"
-        element={user ? <Home user={user} onLogout={handleLogout} /> : <Navigate to="/login" replace />}
-      />
-      <Route path="/checkout" element={user ? <Checkout /> : <Navigate to="/login" replace />} />
-      <Route path="/order/:orderId" element={user ? <OrderConfirmation /> : <Navigate to="/login" replace />} />
+      <Route element={user ? <Layout user={user} onLogout={handleLogout} /> : <Navigate to="/login" replace />}>
+        <Route path="/home" element={<Home />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/order/:orderId" element={<OrderConfirmation />} />
+      </Route>
       <Route path="*" element={<Navigate to={user ? '/home' : '/login'} replace />} />
     </Routes>
   );
