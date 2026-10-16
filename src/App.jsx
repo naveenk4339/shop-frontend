@@ -7,6 +7,7 @@ import Cart from './pages/Cart.jsx';
 import Checkout from './pages/Checkout.jsx';
 import OrderConfirmation from './pages/OrderConfirmation.jsx';
 import Orders from './pages/Orders.jsx';
+import Product from './pages/Product.jsx';
 import { api, getToken, setToken } from './api.js';
 
 export default function App() {
@@ -45,6 +46,7 @@ export default function App() {
       <Route path="/login" element={user ? <Navigate to="/home" replace /> : <Login onLogin={handleLogin} />} />
       <Route element={user ? <Layout user={user} onLogout={handleLogout} /> : <Navigate to="/login" replace />}>
         <Route path="/home" element={<Home />} />
+        <Route path="/product/:productId" element={<Product />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/orders" element={<Orders />} />

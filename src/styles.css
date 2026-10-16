@@ -477,9 +477,41 @@ a:hover { color: var(--link-hover); }
 .auth-divider::before, .auth-divider::after { content: ''; flex: 1; border-top: 1px solid #e7e7e7; }
 .auth-switch { width: 100%; max-width: 350px; }
 
+/* ---------- Product details ---------- */
+.product-title a, .cart-item-info h2 a { color: var(--text); text-decoration: none; }
+.product-title a:hover, .cart-item-info h2 a:hover { color: var(--link-hover); text-decoration: underline; }
+a.product-image { text-decoration: none; }
+.breadcrumb { display: flex; gap: 8px; font-size: 12px; margin-bottom: 14px; }
+.breadcrumb a { color: var(--muted); text-decoration: none; }
+.breadcrumb a:hover { color: var(--link-hover); text-decoration: underline; }
+.product-detail { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr) 260px; gap: 28px; align-items: start; }
+.product-detail-image {
+  background: #fff;
+  border-radius: 8px;
+  aspect-ratio: 1 / 1;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(120px, 18vw, 240px);
+  line-height: 1;
+}
+.product-detail-info { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.product-detail-info h1 { font-size: 24px; font-weight: 400; }
+.product-detail-info hr { width: 100%; border: none; border-top: 1px solid #ddd; margin: 4px 0; }
+.product-detail-info .list-price { margin: 0; font-size: 13px; }
+.product-facts { margin: 8px 0 0; display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; font-size: 14px; }
+.product-facts div { display: contents; }
+.product-facts dt { font-weight: 700; }
+.product-facts dd { margin: 0; }
+.buy-box { display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--border); }
+.buy-box p { margin: 0; }
+.in-stock.big { font-size: 18px; }
+.added-note { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; color: var(--success); font-size: 13px; font-weight: 700; }
+
 /* ---------- Small screens ---------- */
 @media (max-width: 900px) {
-  .cart-page, .checkout-page { grid-template-columns: minmax(0, 1fr); }
+  .cart-page, .checkout-page, .product-detail { grid-template-columns: minmax(0, 1fr); }
   .order-summary { position: static; }
 }
 @media (max-width: 720px) {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../CartContext.jsx';
 import Price from '../components/Price.jsx';
 import QtySelect from '../components/QtySelect.jsx';
@@ -47,7 +47,7 @@ export default function Cart() {
           <div key={line.id} className="cart-item">
             <div className="cart-item-image" aria-hidden="true">{line.emoji}</div>
             <div className="cart-item-info">
-              <h2>{line.name}</h2>
+              <h2><Link to={`/product/${line.id}`}>{line.name}</Link></h2>
               <p className="in-stock">In Stock</p>
               <p className="muted small">FREE Returns · Eligible for FREE Shipping</p>
               <div className="cart-item-actions">
