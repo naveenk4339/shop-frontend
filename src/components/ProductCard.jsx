@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { deliveryDate, discountPercent, MAX_QTY } from '../format.js';
 import Price from './Price.jsx';
 import Rating from './Rating.jsx';
@@ -8,11 +9,13 @@ export default function ProductCard({ product, inCart, onAdd, adding }) {
 
   return (
     <article className="product-card">
-      <div className="product-image" aria-hidden="true">
+      <Link to={`/product/${product.id}`} className="product-image" tabIndex={-1} aria-hidden="true">
         <span>{product.emoji}</span>
-      </div>
+      </Link>
       <div className="product-body">
-        <h3 className="product-title">{product.name}</h3>
+        <h3 className="product-title">
+          <Link to={`/product/${product.id}`}>{product.name}</Link>
+        </h3>
         <Rating rating={product.rating} reviewCount={product.reviewCount} />
         {discount > 0 && <span className="deal-badge">Limited time deal</span>}
         <div className="product-price-row">
