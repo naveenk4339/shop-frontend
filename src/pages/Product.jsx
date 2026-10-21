@@ -86,6 +86,16 @@ export default function Product() {
             <div><dt>Customer rating</dt><dd>{product.rating.toFixed(1)} out of 5</dd></div>
             <div><dt>Ratings</dt><dd>{product.reviewCount.toLocaleString()}</dd></div>
           </dl>
+          {product.highlights?.length > 0 && (
+            <section className="about-item" aria-labelledby="about-item-title">
+              <h2 id="about-item-title">About this item</h2>
+              <ul>
+                {product.highlights.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
+            </section>
+          )}
         </section>
 
         <aside className="panel buy-box">
