@@ -30,11 +30,6 @@ export default function Header({ user, onLogout }) {
     goTo({ q: query.trim(), category });
   };
 
-  const handleLogout = async () => {
-    await onLogout();
-    navigate('/login');
-  };
-
   const firstName = user.email.split('@')[0];
   const activeCategory = params.get('category') || '';
   const dealsActive = params.get('deals') === '1';
@@ -71,7 +66,7 @@ export default function Header({ user, onLogout }) {
 
         <div className="header-account">
           <span className="header-small">Hello, {firstName}</span>
-          <button type="button" className="header-link-button" onClick={handleLogout}>
+          <button type="button" className="header-link-button" onClick={onLogout}>
             Sign out
           </button>
         </div>
