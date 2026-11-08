@@ -9,7 +9,7 @@ Looks and works like a familiar online store:
 - **Departments bar**: All, Today's Deals, Grocery, Electronics, Home & Kitchen, Books
 - **Product grid**: star ratings, review counts, deal badges with % off and list price, delivery date, Add to Cart; sort by price or rating
 - **Product details**: click a product to see its price and savings, rating, "About this item" highlights, delivery date, quantity, Add to Cart and Buy Now
-- **Cart page**: quantity dropdown (1–10), Delete, Remove all items, subtotal, Proceed to checkout
+- **Cart page**: quantity dropdown (1–10), Delete, Save for later, Remove all items, subtotal, Proceed to checkout; a **Saved for later** list with Move to cart and Delete
 - **Checkout**: card payment with validation (test card `4242 4242 4242 4242`; `4000 0000 0000 0002` is declined), item review, order summary, Place your order
 - **Order confirmation**: payment approved amount, order number, total items, item table
 - **Your Orders**: every past order with View order details
