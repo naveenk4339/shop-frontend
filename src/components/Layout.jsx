@@ -4,12 +4,13 @@ import Header from './Header.jsx';
 import Logo from './Logo.jsx';
 
 // Shell for every signed-in page: header, page content, footer.
-export default function Layout({ user, onLogout }) {
+export default function Layout({ user, onLogout, sessionNotice }) {
   return (
     <CartProvider>
       <div className="site">
         <Header user={user} onLogout={onLogout} />
         <main className="site-main">
+          {sessionNotice}
           <Outlet />
         </main>
         <footer className="site-footer">
