@@ -3,7 +3,9 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { api } from '../api.js';
 import { useCart } from '../CartContext.jsx';
 import ProductCard from '../components/ProductCard.jsx';
+import RecentlyViewed from '../components/RecentlyViewed.jsx';
 import { discountPercent, formatPrice } from '../format.js';
+import { clearRecentlyViewed, getRecentlyViewed } from '../recentlyViewed.js';
 
 const SORTS = {
   featured: { label: 'Featured', compare: (a, b) => a.id - b.id },
@@ -20,6 +22,7 @@ export default function Home() {
   const [error, setError] = useState('');
   const [addingId, setAddingId] = useState(null);
   const [justAdded, setJustAdded] = useState(null);
+  const [recentIds, setRecentIds] = useState(getRecentlyViewed);
 
   const query = (params.get('q') || '').trim();
   const category = params.get('category') || '';
@@ -39,6 +42,18 @@ export default function Home() {
       .filter((p) => words.every((w) => `${p.name} ${p.category}`.toLowerCase().includes(w)))
       .sort(SORTS[sort].compare);
   }, [products, query, category, dealsOnly, sort]);
+
+  // Only products that still exist, using today's prices.
+  const recentProducts = useMemo(
+    () => (products ? recentIds.map((id) => products.find((p) => p.id === id)).filter(Boolean) : []),
+    [products, recentIds]
+  );
+  const showRecent = !query && !category && !dealsOnly && recentProducts.length > 0;
+
+  const clearHistory = () => {
+    clearRecentlyViewed();
+    setRecentIds([]);
+  };
 
   const handleAdd = async (productId) => {
     setAddingId(productId);
@@ -95,6 +110,7 @@ export default function Home() {
       </div>
 
       <div className="page-container">
+        {showRecent && <RecentlyViewed products={recentProducts} onClear={clearHistory} />}
         <h1 className="page-title">{heading}</h1>
         {(error || cart.error) && <div className="alert alert-error" role="alert">{error || cart.error}</div>}
 

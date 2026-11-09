@@ -9,6 +9,7 @@ import OrderConfirmation from './pages/OrderConfirmation.jsx';
 import Orders from './pages/Orders.jsx';
 import Product from './pages/Product.jsx';
 import { api, clearSession, getToken, SESSION_ENDED_EVENT, setToken } from './api.js';
+import { clearRecentlyViewed } from './recentlyViewed.js';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -20,6 +21,7 @@ export default function App() {
 
   useEffect(() => {
     const endSession = () => {
+      clearRecentlyViewed(); // don't show the next person on this device what was viewed
       setUser(null);
       setRestoreError('');
       setLogoutFailed(false);
