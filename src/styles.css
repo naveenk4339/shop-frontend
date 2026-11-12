@@ -472,6 +472,15 @@ a:hover { color: var(--link-hover); }
 .order-number { margin-left: auto; }
 .order-card-body { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 16px 18px; }
 .order-status { margin: 0 0 6px; color: var(--success); font-weight: 700; }
+.order-status.cancelled { color: var(--error); }
+.order-card.is-cancelled .order-card-head { background: #f7f7f7; }
+.order-actions { display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+.cancel-confirm { display: flex; flex-direction: column; gap: 8px; max-width: 360px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: #fffaf3; }
+.cancel-confirm p { margin: 0; font-size: 13px; }
+.btn-danger { background: var(--error); border-color: var(--error); color: #fff; }
+.btn-danger:hover:not(:disabled) { background: #a30000; color: #fff; }
+.confirmation-head.is-cancelled h1 { color: var(--error); }
+.confirmation-head.is-cancelled .confirm-icon { background: var(--error); }
 .order-items { margin: 0; padding-left: 18px; }
 
 /* ---------- Sign in ---------- */
