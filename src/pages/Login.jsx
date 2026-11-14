@@ -43,7 +43,7 @@ export default function Login({ onLogin }) {
     setError('');
   };
 
-  const useDemoAccount = () => {
+  const fillDemoAccount = () => {
     setMode('login');
     setEmail('demo@shop.com');
     setPassword('demo123');
@@ -51,7 +51,7 @@ export default function Login({ onLogin }) {
   };
 
   return (
-    <div className="auth-page">
+    <main className="auth-page">
       <Logo dark />
       <form className="auth-box" onSubmit={handleSubmit} noValidate>
         <h1>{isRegister ? 'Create account' : 'Sign in'}</h1>
@@ -84,7 +84,7 @@ export default function Login({ onLogin }) {
         {!isRegister && (
           <div className="demo-box">
             <span>Demo account: <strong>demo@shop.com</strong> / <strong>demo123</strong></span>
-            <button type="button" className="btn btn-secondary btn-small" onClick={useDemoAccount}>
+            <button type="button" className="btn btn-secondary btn-small" onClick={fillDemoAccount}>
               Fill in demo account
             </button>
           </div>
@@ -95,6 +95,6 @@ export default function Login({ onLogin }) {
       <button type="button" className="btn btn-secondary auth-switch" onClick={switchMode}>
         {isRegister ? 'Sign in to your account' : 'Create your Shopcart account'}
       </button>
-    </div>
+    </main>
   );
 }

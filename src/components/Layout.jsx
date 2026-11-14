@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import { CartProvider } from '../CartContext.jsx';
 import Header from './Header.jsx';
@@ -5,11 +6,23 @@ import Logo from './Logo.jsx';
 
 // Shell for every signed-in page: header, page content, footer.
 export default function Layout({ user, onLogout, sessionNotice }) {
+  const mainRef = useRef(null);
+
+  // Lets keyboard users jump past the header without changing the address.
+  const skipToMain = (e) => {
+    e.preventDefault();
+    mainRef.current?.focus();
+    mainRef.current?.scrollIntoView();
+  };
+
   return (
     <CartProvider>
       <div className="site">
+        <a href="#main-content" className="skip-link" onClick={skipToMain}>
+          Skip to main content
+        </a>
         <Header user={user} onLogout={onLogout} />
-        <main className="site-main">
+        <main id="main-content" className="site-main" tabIndex={-1} ref={mainRef}>
           {sessionNotice}
           <Outlet />
         </main>
