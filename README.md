@@ -55,3 +55,7 @@ src/
   components/         Header, Layout, ProductCard, Price, Rating, QtySelect, Logo
   pages/              Login, Home, Product, Cart, Checkout, OrderConfirmation, Orders
 ```
+
+## Continuous integration
+
+GitHub Actions (`.github/workflows/ci.yml`) runs `npm ci`, the tests (`npm test`, when present) and `npm run build` on Node 22 for every pull request and every push to `main`. The result shows as a check on each pull request.
