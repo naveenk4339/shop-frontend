@@ -57,7 +57,8 @@ export const api = {
   saveForLater: (productId) => request(`/saved/${productId}`, { method: 'POST' }),
   moveToCart: (productId) => request(`/saved/${productId}/move-to-cart`, { method: 'POST' }),
   removeSaved: (productId) => request(`/saved/${productId}`, { method: 'DELETE' }),
-  checkout: (card) => request('/checkout', { method: 'POST', body: { card } }),
+  checkCoupon: (code) => request('/coupons/check', { method: 'POST', body: { code } }),
+  checkout: (card, couponCode) => request('/checkout', { method: 'POST', body: { card, couponCode } }),
   orders: () => request('/orders'),
   order: (orderId) => request(`/orders/${encodeURIComponent(orderId)}`),
 };
