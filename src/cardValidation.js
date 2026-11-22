@@ -1,4 +1,4 @@
-// Mirrors server/src/payment.js so mistakes show before the form is sent.
+// Mirrors shop-backend/src/payment.js so mistakes show before the form is sent.
 // The server checks again; this is only for quick feedback.
 
 function passesLuhn(digits) {

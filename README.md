@@ -28,6 +28,19 @@ npm run dev
 
 Open http://localhost:5173.
 
+## Tests
+
+```bash
+npm test
+```
+
+Runs [Vitest](https://vitest.dev) unit tests for the plain JavaScript helpers:
+
+- `src/cardValidation.test.js`: card checks shown before paying (checksum, expiry, CVV, brand) and the card number / expiry formatters
+- `src/format.test.js`: prices, discount %, delivery and order dates
+
+The backend has its own tests for the same card rules and the checkout API (`npm test` in shop-backend).
+
 ## Configuration
 
 Copy `.env.example` to `.env` to change these:
@@ -56,3 +69,7 @@ src/
   components/         Header, Layout, ProductCard, RecentlyViewed, Price, Rating, QtySelect, Logo
   pages/              Login, Home, Product, Cart, Checkout, OrderConfirmation, Orders
 ```
+
+## Continuous integration
+
+GitHub Actions (`.github/workflows/ci.yml`) runs `npm ci`, the tests (`npm test`, when present) and `npm run build` on Node 22 for every pull request and every push to `main`. The result shows as a check on each pull request.
