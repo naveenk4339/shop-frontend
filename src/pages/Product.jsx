@@ -6,6 +6,7 @@ import Price from '../components/Price.jsx';
 import QtySelect from '../components/QtySelect.jsx';
 import Rating from '../components/Rating.jsx';
 import { deliveryDate, discountPercent, formatPrice, MAX_QTY } from '../format.js';
+import { addRecentlyViewed } from '../recentlyViewed.js';
 
 export default function Product() {
   const { productId } = useParams();
@@ -20,7 +21,11 @@ export default function Product() {
   useEffect(() => {
     api
       .products()
-      .then((list) => setProduct(list.find((p) => p.id === Number(productId)) ?? null))
+      .then((list) => {
+        const found = list.find((p) => p.id === Number(productId)) ?? null;
+        if (found) addRecentlyViewed(found.id);
+        setProduct(found);
+      })
       .catch((err) => setError(err.message));
   }, [productId]);
 
