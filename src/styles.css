@@ -438,6 +438,14 @@ a:hover { color: var(--link-hover); }
 .summary-rows div { display: flex; justify-content: space-between; font-size: 13px; font-variant-numeric: tabular-nums; }
 .summary-rows dd { margin: 0; }
 .summary-total { border-top: 1px solid #ddd; margin-top: 6px; padding-top: 8px; color: #b12704; font-weight: 700; font-size: 18px !important; }
+.summary-discount { color: var(--success); }
+.promo-form { display: flex; flex-direction: column; gap: 6px; border-top: 1px solid #ddd; padding-top: 12px; }
+.promo-form label { font-weight: 700; font-size: 13px; }
+.promo-row { display: flex; gap: 8px; }
+.promo-row input { flex: 1; min-width: 0; height: 32px; padding: 3px 8px; border: 1px solid #888c8c; border-radius: 4px; font: inherit; text-transform: uppercase; }
+.promo-row input::placeholder { text-transform: none; }
+.promo-row input:focus { outline: none; border-color: var(--focus); box-shadow: 0 0 0 3px #c8f3fa; }
+.promo-applied { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px; border-top: 1px solid #ddd; padding-top: 12px; color: var(--success); font-size: 13px; }
 
 /* ---------- Confirmation & orders ---------- */
 .confirmation-page { max-width: 900px; }

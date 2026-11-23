@@ -12,6 +12,34 @@ export default function Checkout() {
   const [fieldErrors, setFieldErrors] = useState({});
   const [error, setError] = useState('');
   const [paying, setPaying] = useState(false);
+  // Promo code: what's typed, and the server's answer once it's applied.
+  const [promoInput, setPromoInput] = useState('');
+  const [promo, setPromo] = useState(null); // { code, label, discount }
+  const [promoError, setPromoError] = useState('');
+  const [checkingPromo, setCheckingPromo] = useState(false);
+
+  const applyPromo = async (e) => {
+    e.preventDefault();
+    if (!promoInput.trim()) {
+      setPromoError('Enter a promo code.');
+      return;
+    }
+    setCheckingPromo(true);
+    setPromoError('');
+    try {
+      setPromo(await api.checkCoupon(promoInput));
+      setPromoInput('');
+    } catch (err) {
+      setPromoError(err.message);
+    } finally {
+      setCheckingPromo(false);
+    }
+  };
+
+  const removePromo = () => {
+    setPromo(null);
+    setPromoError('');
+  };
 
   const update = (field, format = (v) => v) => (e) => {
     setCard((prev) => ({ ...prev, [field]: format(e.target.value) }));
@@ -30,12 +58,17 @@ export default function Checkout() {
     setError('');
     setPaying(true);
     try {
-      const order = await api.checkout(card);
+      const order = await api.checkout(card, promo?.code);
       await cart.reload(); // the server empties the cart after payment
       navigate(`/order/${order.id}`, { replace: true, state: { order } });
     } catch (err) {
       setError(err.message);
-      if (err.fields) setFieldErrors(err.fields);
+      if (err.fields?.coupon) {
+        setPromo(null);
+        setPromoError(err.fields.coupon);
+      } else if (err.fields) {
+        setFieldErrors(err.fields);
+      }
       setPaying(false);
     }
   };
@@ -157,8 +190,41 @@ export default function Checkout() {
         <dl className="summary-rows">
           <div><dt>Items ({cart.totalItems}):</dt><dd>{formatPrice(cart.totalPrice)}</dd></div>
           <div><dt>Shipping &amp; handling:</dt><dd>$0.00</dd></div>
-          <div className="summary-total"><dt>Order total:</dt><dd>{formatPrice(cart.totalPrice)}</dd></div>
+          {promo && (
+            <div className="summary-discount"><dt>Promotion ({promo.code}):</dt><dd>−{formatPrice(promo.discount)}</dd></div>
+          )}
+          <div className="summary-total"><dt>Order total:</dt><dd>{formatPrice(cart.totalPrice - (promo?.discount ?? 0))}</dd></div>
         </dl>
+
+        {promo ? (
+          <div className="promo-applied" role="status">
+            <span>✓ <strong>{promo.code}</strong> applied: {promo.label}</span>
+            <button type="button" className="btn btn-link" onClick={removePromo} disabled={paying}>
+              Remove
+            </button>
+          </div>
+        ) : (
+          <form className="promo-form" onSubmit={applyPromo} noValidate>
+            <label htmlFor="promo-code">Promo code</label>
+            <div className="promo-row">
+              <input
+                id="promo-code"
+                value={promoInput}
+                onChange={(e) => {
+                  setPromoInput(e.target.value);
+                  setPromoError('');
+                }}
+                placeholder="e.g. SAVE10"
+                autoComplete="off"
+                aria-describedby={promoError ? 'promo-error' : undefined}
+              />
+              <button type="submit" className="btn btn-secondary" disabled={checkingPromo || paying}>
+                {checkingPromo ? 'Checking…' : 'Apply'}
+              </button>
+            </div>
+            {promoError && <p id="promo-error" className="field-error" role="alert">{promoError}</p>}
+          </form>
+        )}
       </aside>
     </div>
   );
