@@ -76,8 +76,9 @@ export default function Header({ user, onLogout }) {
           <span className="header-strong">&amp; Orders</span>
         </Link>
 
-        <Link to="/cart" className="header-cart" aria-label={`Cart, ${totalItems} items`}>
+        <Link to="/cart" className="header-cart">
           <span className="cart-count">{totalItems}</span>
+          <span className="visually-hidden">{totalItems === 1 ? ' item in' : ' items in'}</span>
           <span className="header-strong">Cart</span>
         </Link>
       </div>

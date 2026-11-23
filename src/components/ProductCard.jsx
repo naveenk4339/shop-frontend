@@ -13,9 +13,9 @@ export default function ProductCard({ product, inCart, onAdd, adding }) {
         <span>{product.emoji}</span>
       </Link>
       <div className="product-body">
-        <h3 className="product-title">
+        <h2 className="product-title">
           <Link to={`/product/${product.id}`}>{product.name}</Link>
-        </h3>
+        </h2>
         <Rating rating={product.rating} reviewCount={product.reviewCount} />
         {discount > 0 && <span className="deal-badge">Limited time deal</span>}
         <div className="product-price-row">
