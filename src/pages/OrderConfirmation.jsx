@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { api } from '../api.js';
+import CancelOrder from '../components/CancelOrder.jsx';
 import { deliveryDate, formatOrderDate, formatPrice, parseServerDate } from '../format.js';
 
 export default function OrderConfirmation() {
@@ -25,16 +26,17 @@ export default function OrderConfirmation() {
   }
 
   const justPlaced = Boolean(location.state?.order);
+  const cancelled = order.status === 'CANCELLED';
 
   return (
     <div className="page-container confirmation-page">
       <section className="panel confirmation">
-        <div className="confirmation-head">
-          <span className="confirm-icon" aria-hidden="true">✓</span>
+        <div className={`confirmation-head ${cancelled ? 'is-cancelled' : ''}`}>
+          <span className="confirm-icon" aria-hidden="true">{cancelled ? '×' : '✓'}</span>
           <div>
-            <h1>{justPlaced ? 'Order placed, thank you!' : 'Order details'}</h1>
+            <h1>{cancelled ? 'Order cancelled' : justPlaced ? 'Order placed, thank you!' : 'Order details'}</h1>
             <p className="approved">
-              Payment approved: <strong>{formatPrice(order.totalAmount)}</strong>
+              {cancelled ? 'Refunded' : 'Payment approved'}: <strong>{formatPrice(order.totalAmount)}</strong>
             </p>
           </div>
         </div>
@@ -44,7 +46,11 @@ export default function OrderConfirmation() {
           <div><dt>Order placed</dt><dd>{formatOrderDate(order.createdAt)}</dd></div>
           <div><dt>Total items</dt><dd>{order.totalItems}</dd></div>
           <div><dt>Paid with</dt><dd>{order.card.brand} ending in {order.card.last4}</dd></div>
-          <div><dt>Arriving</dt><dd>{deliveryDate(parseServerDate(order.createdAt))}</dd></div>
+          {cancelled ? (
+            <div><dt>Status</dt><dd>Cancelled</dd></div>
+          ) : (
+            <div><dt>Arriving</dt><dd>{deliveryDate(parseServerDate(order.createdAt))}</dd></div>
+          )}
         </dl>
 
         <table className="order-table">
@@ -63,7 +69,7 @@ export default function OrderConfirmation() {
           </tbody>
           <tfoot>
             <tr><td colSpan="3">Total items</td><td>{order.totalItems}</td></tr>
-            <tr className="grand-total"><td colSpan="3">Approved amount</td><td>{formatPrice(order.totalAmount)}</td></tr>
+            <tr className="grand-total"><td colSpan="3">{cancelled ? 'Refunded amount' : 'Approved amount'}</td><td>{formatPrice(order.totalAmount)}</td></tr>
           </tfoot>
         </table>
 
@@ -75,6 +81,7 @@ export default function OrderConfirmation() {
             View your orders
           </button>
         </div>
+        <CancelOrder order={order} onCancelled={setOrder} />
       </section>
     </div>
   );

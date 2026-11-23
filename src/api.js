@@ -60,4 +60,5 @@ export const api = {
   checkout: (card) => request('/checkout', { method: 'POST', body: { card } }),
   orders: () => request('/orders'),
   order: (orderId) => request(`/orders/${encodeURIComponent(orderId)}`),
+  cancelOrder: (orderId) => request(`/orders/${encodeURIComponent(orderId)}/cancel`, { method: 'POST' }),
 };
